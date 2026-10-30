@@ -152,6 +152,96 @@ Aplikasi secara default berjalan pada:
 
 `http://localhost:8080`
 
+## Menjalankan dengan Docker
+
+Nasabah Service API dapat tersedia dalam bentuk Docker image melalui Docker Hub.
+
+**Docker Image:** `fauzanrizkyanag/nasabah-service:1.0`
+
+### Prerequisite
+
+- Docker Desktop yang terinstal dan berjalan.
+- MySQL Server yang berjalan.
+- Database `nasabah_db` yang sudah dibuat.
+
+### 1. Lakukan Pull Docker Image
+
+```bash
+docker pull fauzanrizkyanag/nasabah-service:1.0
+```
+
+### 2. Konfigurasikan Environment Variable
+
+Buatlah file `.env` pada working directory anda:
+
+```env
+DB_HOST=host.docker.internal
+DB_PORT=3306
+DB_NAME=nasabah_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Sesuaikan username dan password berdasarkan konfigurasi MySQL anda.
+
+Pastikan database MySQL `nasabah_db` sudah ada and dapat diakses dari Docker.
+
+### 3. Jalankan Container
+
+```bash
+docker run --name nasabah-service \
+  -p 8080:8080 \
+  --env-file .env \
+  nasabah-service:1.0
+```
+
+Jika anda menggunakan Docker Hub image secara langsung, gunakan:
+
+```bash
+docker run --name nasabah-service \
+  -p 8080:8080 \
+  --env-file .env \
+  fauzanrizkyanag/nasabah-service:1.0
+```
+
+`host.docker.internal` mengizinkan Docker Desktop container untuk mengakses service berjalan pada host machine.
+
+### 4. Akses API
+
+Ketika container sedang berjalan, buka API di:
+
+```text
+http://localhost:8080/api/nasabah
+```
+
+### 5. Container Management
+
+Untuk menghentikan container:
+
+```bash
+docker stop nasabah-service
+```
+
+Untuk menjalankan kembali:
+
+```bash
+docker start nasabah-service
+```
+
+Untuk melihat log container:
+
+```bash
+docker logs nasabah-service
+```
+
+Menghapus container:
+
+```bash
+docker rm -f nasabah-service
+```
+
+**Catatan:** File `.env` mengandung kredensial database and sebaiknya tidak di-commit ke dalam repositori Git.
+
 ## Dokumentasi REST API
 
 Base URL:
